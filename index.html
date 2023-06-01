@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Indian Map</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-image: url('india-map.jpg');
+      background-size: cover;
+      font-family: Arial, sans-serif;
+    }
+
+    #map {
+      width: 600px;
+      height: 400px;
+      position: relative;
+    }
+
+    .search-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+
+    .search-input {
+      padding: 10px;
+      width: 200px;
+      font-size: 16px;
+    }
+
+    .search-results {
+      margin-top: 10px;
+    }
+
+    .search-results li {
+      list-style: none;
+      margin-bottom: 5px;
+      cursor: pointer;
+    }
+
+    .highlight {
+      animation: highlightName 2s infinite;
+    }
+
+    @keyframes highlightName {
+      0%, 50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="map">
+    <div class="search-container">
+      <input type="text" class="search-input" placeholder="Search for a place">
+      <ul class="search-results"></ul>
+    </div>
+  </div>
+
+  <script>
+    var places = ['Delhi', 'Mumbai', 'Kolkata', 'Chennai', 'Bangalore'];
+    var map = document.getElementById('map');
+    var searchInput = document.querySelector('.search-input');
+    var searchResults = document.querySelector('.search-results');
+
+    searchInput.addEventListener('input', function() {
+      var searchQuery = searchInput.value.toLowerCase();
+      var matchedPlaces = [];
+
+      if (searchQuery.length > 0) {
+        matchedPlaces = places.filter(function(place) {
+          return place.toLowerCase().includes(searchQuery);
+        });
+      }
+
+      displayResults(matchedPlaces);
+    });
+
+    function displayResults(results) {
+      searchResults.innerHTML = '';
+
+      if (results.length === 0) {
+        searchResults.innerHTML = '<li>No results found</li>';
+      } else {
+        results.forEach(function(result) {
+          var li = document.createElement('li');
+          li.textContent = result;
+          li.addEventListener('click', function() {
+            highlightPlace(result);
+          });
+          searchResults.appendChild(li);
+        });
+      }
+    }
+
+    function highlightPlace(place) {
+      var existingHighlights = document.querySelectorAll('.highlight');
+      existingHighlights.forEach(function(highlight) {
+        highlight.classList.remove('highlight');
+      });
+
+      var placeElement = document.createElement('span');
+      placeElement.textContent = place;
+      placeElement.classList.add('highlight');
+      map.appendChild(placeElement);
+    }
+  </script>
+</body>
+</html>
